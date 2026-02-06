@@ -610,6 +610,31 @@
                 opacity: 0;
             }
         }
+
+        /* Glitter Particle */
+        .glitter {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10003;
+            box-shadow: 0 0 10px white, 0 0 20px var(--pink-soft);
+            animation: glitterFade 1s ease-out forwards;
+        }
+
+        @keyframes glitterFade {
+            0% {
+                transform: scale(0) rotate(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1.5) rotate(180deg);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 
@@ -825,7 +850,23 @@
 
         // Effects
         const cursor = document.getElementById('cursor');
-        document.onmousemove = (e) => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; };
+        document.onmousemove = (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+
+            // Spawn Glitter Trail
+            if (Math.random() > 0.7) { // Limit density
+                const g = document.createElement('div');
+                g.className = 'glitter';
+                g.style.left = (e.clientX + (Math.random() * 20 - 10)) + 'px';
+                g.style.top = (e.clientY + (Math.random() * 20 - 10)) + 'px';
+                // Randomize sparkle color slightly
+                const colors = ['#ffffff', '#FFB7C5', '#FFDAB9'];
+                g.style.background = colors[Math.floor(Math.random() * colors.length)];
+                document.body.appendChild(g);
+                setTimeout(() => g.remove(), 1000);
+            }
+        };
 
         const hearts = document.getElementById('hearts-container');
         function spawnHeart() {
