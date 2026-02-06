@@ -770,6 +770,19 @@
         const surprise = document.getElementById('final-surprise');
         const finalPhoto = document.getElementById('final-photo');
         const backBtn = document.getElementById('backHomeBtn');
+        const fSparkles = document.getElementById('final-sparkles');
+
+        function spawnFinalSparkle() {
+            if (surprise.style.display === 'flex') {
+                const s = document.createElement('div');
+                s.className = 'sparkle-pulse';
+                s.style.left = Math.random() * 100 + 'vw';
+                s.style.top = Math.random() * 100 + 'vh';
+                s.style.width = '10px'; s.style.height = '10px';
+                fSparkles.appendChild(s);
+                setTimeout(() => s.remove(), 1000);
+            }
+        }
 
         rBtn.onclick = () => {
             // Start Heart Burst
@@ -777,6 +790,9 @@
 
             setTimeout(() => {
                 surprise.style.display = 'flex';
+                const sparkleInterval = setInterval(spawnFinalSparkle, 300);
+                surprise.dataset.interval = sparkleInterval;
+
                 setTimeout(() => {
                     surprise.style.opacity = '1';
                     // Reveal Photo
@@ -798,6 +814,7 @@
 
         backBtn.onclick = () => {
             surprise.style.opacity = '0';
+            clearInterval(surprise.dataset.interval);
             setTimeout(() => {
                 surprise.style.display = 'none';
                 finalPhoto.classList.remove('reveal');
