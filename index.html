@@ -850,17 +850,13 @@
 
         // Effects
         const cursor = document.getElementById('cursor');
-        document.onmousemove = (e) => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
 
-            // Spawn Glitter Trail
-            if (Math.random() > 0.7) { // Limit density
+        function createGlitter(x, y) {
+            if (Math.random() > 0.6) { // Slightly higher density for mobile feel
                 const g = document.createElement('div');
                 g.className = 'glitter';
-                g.style.left = (e.clientX + (Math.random() * 20 - 10)) + 'px';
-                g.style.top = (e.clientY + (Math.random() * 20 - 10)) + 'px';
-                // More visible, vibrant colors
+                g.style.left = (x + (Math.random() * 20 - 10)) + 'px';
+                g.style.top = (y + (Math.random() * 20 - 10)) + 'px';
                 const colors = ['#FF6B81', '#FF1493', '#FFD700', '#FF4500'];
                 const selectedColor = colors[Math.floor(Math.random() * colors.length)];
                 g.style.background = selectedColor;
@@ -868,6 +864,23 @@
                 document.body.appendChild(g);
                 setTimeout(() => g.remove(), 1200);
             }
+        }
+
+        document.onmousemove = (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            createGlitter(e.clientX, e.clientY);
+        };
+
+        // Mobile Touch Support
+        document.ontouchmove = (e) => {
+            const touch = e.touches[0];
+            createGlitter(touch.clientX, touch.clientY);
+        };
+
+        document.ontouchstart = (e) => {
+            const touch = e.touches[0];
+            createGlitter(touch.clientX, touch.clientY);
         };
 
         const hearts = document.getElementById('hearts-container');
