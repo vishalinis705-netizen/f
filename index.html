@@ -357,6 +357,28 @@
             background-position: center;
             filter: blur(15px) brightness(0.6);
             transform: scale(1.1);
+            animation: finalBgPulse 20s infinite alternate;
+        }
+
+        @keyframes finalBgPulse {
+            0% {
+                transform: scale(1.1) rotate(0deg);
+            }
+
+            100% {
+                transform: scale(1.3) rotate(2deg);
+            }
+        }
+
+        /* Final Sparkles Layer */
+        #final-sparkles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9001;
         }
 
         #final-content {
@@ -368,14 +390,19 @@
         }
 
         #final-photo {
-            width: 100%;
-            max-width: 450px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 60vh;
+            /* Prevent vertical cropping */
+            object-fit: contain;
+            /* Ensure full image visibility */
             border-radius: 15px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            margin-bottom: 40px;
-            transform: scale(0.7);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            margin-bottom: 30px;
+            transform: scale(0.6) translateY(30px);
             opacity: 0;
             transition: all 2.5s cubic-bezier(0.19, 1, 0.22, 1);
+            border: 5px solid rgba(255, 255, 255, 0.3);
         }
 
         #final-photo.reveal {
@@ -646,6 +673,7 @@
     <!-- Final Surprise Frame -->
     <div id="final-surprise">
         <div id="final-bg" style="background-image: url('images/final-image.jpg');"></div>
+        <div id="final-sparkles"></div>
         <div id="final-content" class="final-reveal">
             <img src="images/final-image.jpg" id="final-photo" alt="Final Surprise">
             <h1>Always you ❤️</h1>
