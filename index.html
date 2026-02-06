@@ -851,16 +851,21 @@
         // Effects
         const cursor = document.getElementById('cursor');
 
-        function createGlitter(x, y) {
-            if (Math.random() > 0.6) { // Slightly higher density for mobile feel
+        function createGlitter(x, y, density = 0.4) {
+            if (Math.random() > density) {
                 const g = document.createElement('div');
                 g.className = 'glitter';
-                g.style.left = (x + (Math.random() * 20 - 10)) + 'px';
-                g.style.top = (y + (Math.random() * 20 - 10)) + 'px';
-                const colors = ['#FF6B81', '#FF1493', '#FFD700', '#FF4500'];
+                g.style.left = (x + (Math.random() * 30 - 15)) + 'px';
+                g.style.top = (y + (Math.random() * 30 - 15)) + 'px';
+
+                // Visible darker/vibrant colors for better contrast
+                const colors = ['#C2185B', '#880E4F', '#B71C1C', '#4A148C', '#FF6B81'];
                 const selectedColor = colors[Math.floor(Math.random() * colors.length)];
                 g.style.background = selectedColor;
-                g.style.boxShadow = `0 0 10px ${selectedColor}, 0 0 20px white`;
+                g.style.boxShadow = `0 0 12px ${selectedColor}, 0 0 5px white`;
+                g.style.width = (Math.random() * 6 + 6) + 'px'; // Slightly larger
+                g.style.height = g.style.width;
+
                 document.body.appendChild(g);
                 setTimeout(() => g.remove(), 1200);
             }
@@ -875,12 +880,22 @@
         // Mobile Touch Support
         document.ontouchmove = (e) => {
             const touch = e.touches[0];
-            createGlitter(touch.clientX, touch.clientY);
+            createGlitter(touch.clientX, touch.clientY, 0.2); // Higher density for touch
         };
 
         document.ontouchstart = (e) => {
             const touch = e.touches[0];
-            createGlitter(touch.clientX, touch.clientY);
+            createGlitter(touch.clientX, touch.clientY, 0.1);
+        };
+
+        // Scroll Glitter - Spawns at current cursor/center
+        let lastScrollY = window.scrollY;
+        window.onscroll = () => {
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            // Spawn around center if no mouse movement, or just general area
+            createGlitter(centerX + (Math.random() * 200 - 100), centerY + (Math.random() * 200 - 100), 0.5);
+            lastScrollY = window.scrollY;
         };
 
         const hearts = document.getElementById('hearts-container');
