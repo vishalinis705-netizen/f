@@ -419,28 +419,73 @@
             transform: scale(1.05);
         }
 
-        /* Controls */
-        .music-btn {
+        /* Music Controls */
+        #music-overlay {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: white;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: none;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 248, 248, 0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             z-index: 10001;
+            transition: opacity 0.5s ease;
+        }
+
+        .music-instruction {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            color: var(--accent-heart);
+            margin-bottom: 20px;
+            text-align: center;
+            animation: breath 3s infinite ease-in-out;
+        }
+
+        .music-btn {
+            background: white;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid var(--accent-heart);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            font-size: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             transition: 0.38s;
         }
 
         .music-btn:hover {
             transform: scale(1.1);
+            background: var(--pink-soft);
+            color: white;
+        }
+
+        /* Hide overlay once playing */
+        #music-overlay.playing {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Mini control for later */
+        .music-mini {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 45px;
+            height: 45px;
+            font-size: 1.2rem;
+            z-index: 10001;
+            opacity: 0;
+            transition: 0.5s;
+        }
+
+        .music-mini.visible {
+            opacity: 1;
         }
 
         /* Cursor */
@@ -648,17 +693,37 @@
         populate('moments-gallery', categorized.moments);
         populate('justyou-gallery', categorized.justyou);
 
-        // Music
+        // Music Logic
         const music = document.getElementById('bgMusic');
+        const mOverlay = document.getElementById('music-overlay');
         const mBtn = document.getElementById('musicToggle');
+        const mMini = document.getElementById('musicMiniToggle');
         const mIcon = document.getElementById('musicIcon');
         let playAuto = false;
+
         function toggleMusic() {
-            if (music.paused) { music.play(); mIcon.innerText = '⏸️'; }
-            else { music.pause(); mIcon.innerText = '🎵'; }
+            if (music.paused) {
+                music.play();
+                mIcon.innerText = '⏸️';
+                mMini.innerText = '⏸️';
+                mOverlay.classList.add('playing');
+                mMini.classList.add('visible');
+            }
+            else {
+                music.pause();
+                mIcon.innerText = '🎵';
+                mMini.innerText = '🎵';
+            }
         }
         mBtn.onclick = (e) => { e.stopPropagation(); toggleMusic(); playAuto = true; };
-        document.addEventListener('click', () => { if (!playAuto && music.paused) { toggleMusic(); playAuto = true; } }, { once: true });
+        mMini.onclick = (e) => { e.stopPropagation(); toggleMusic(); };
+
+        // Generic Interaction for music
+        document.addEventListener('click', () => {
+            if (!playAuto && music.paused) {
+                // Keep overlay until central button is clicked
+            }
+        }, { once: true });
 
         // Reveal logic with Heart Burst
         const rBtn = document.getElementById('oneMoreBtn');
