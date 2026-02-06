@@ -616,12 +616,12 @@
             position: fixed;
             width: 8px;
             height: 8px;
-            background: white;
+            background: var(--accent-heart);
             border-radius: 50%;
             pointer-events: none;
             z-index: 10003;
-            box-shadow: 0 0 10px white, 0 0 20px var(--pink-soft);
-            animation: glitterFade 1s ease-out forwards;
+            box-shadow: 0 0 10px var(--accent-heart), 0 0 20px white;
+            animation: glitterFade 1.2s ease-out forwards;
         }
 
         @keyframes glitterFade {
@@ -860,11 +860,13 @@
                 g.className = 'glitter';
                 g.style.left = (e.clientX + (Math.random() * 20 - 10)) + 'px';
                 g.style.top = (e.clientY + (Math.random() * 20 - 10)) + 'px';
-                // Randomize sparkle color slightly
-                const colors = ['#ffffff', '#FFB7C5', '#FFDAB9'];
-                g.style.background = colors[Math.floor(Math.random() * colors.length)];
+                // More visible, vibrant colors
+                const colors = ['#FF6B81', '#FF1493', '#FFD700', '#FF4500'];
+                const selectedColor = colors[Math.floor(Math.random() * colors.length)];
+                g.style.background = selectedColor;
+                g.style.boxShadow = `0 0 10px ${selectedColor}, 0 0 20px white`;
                 document.body.appendChild(g);
-                setTimeout(() => g.remove(), 1000);
+                setTimeout(() => g.remove(), 1200);
             }
         };
 
